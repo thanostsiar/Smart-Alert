@@ -16,7 +16,7 @@ public class SignIn extends AppCompatActivity {
         setContentView(R.layout.activity_sing_in);
         btn_sign_up = findViewById(R.id.button_signup);
         btn_sign_in = findViewById(R.id.button_signin);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         btn_sign_up.setOnClickListener(v -> {
             OpenSignUp();
         });
