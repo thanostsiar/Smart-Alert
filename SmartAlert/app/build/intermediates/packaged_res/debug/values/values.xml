@@ -287,6 +287,7 @@
     <string name="text_signin_signup">Don\'t have an account? <b>Sign up</b></string>
     <string name="text_signin_social_media">Or Sign in using social media</string>
     <string name="text_signup_message">Hello, let\'s set up your account</string>
+    <string name="text_signup_signin">Already have an account? <b>Sign in</b></string>
     <string name="text_signup_social_media">Or Sign up using social media</string>
     <string name="text_signup_terms">By signing up, you agree to our <b>terms and conditions</b></string>
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
