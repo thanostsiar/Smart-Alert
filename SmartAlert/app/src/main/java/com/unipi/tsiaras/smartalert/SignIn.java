@@ -7,7 +7,6 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SignIn extends AppCompatActivity {
-
     Button btn_sign_up;
     Button btn_sign_in;
     @Override
@@ -16,7 +15,6 @@ public class SignIn extends AppCompatActivity {
         setContentView(R.layout.activity_sing_in);
         btn_sign_up = findViewById(R.id.button_signup);
         btn_sign_in = findViewById(R.id.button_signin);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         btn_sign_up.setOnClickListener(v -> {
             OpenSignUp();
         });

@@ -29,6 +29,7 @@
         android:layout_gravity="center"
         android:background="@drawable/button1_bg"
         android:backgroundTint="@null"
+        android:onClick="signUp"
         android:text="@string/button_sign_up"
         android:textSize="20sp"
         app:iconTint="@null"
