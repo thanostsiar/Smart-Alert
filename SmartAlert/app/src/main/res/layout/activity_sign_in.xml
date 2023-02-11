@@ -82,6 +82,7 @@
         android:layout_gravity="center"
         android:background="@drawable/button1_bg"
         android:backgroundTint="@null"
+        android:onClick="signIn"
         android:text="@string/button_sign_in"
         android:textSize="20sp"
         app:iconTint="@null"
@@ -119,15 +120,16 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="179dp"
+        android:layout_height="44dp"
         android:fontFamily="sans-serif-black"
-        android:text="Welcome to Smart-Alert"
+        android:text="Smart-Alert"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.599"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
+        app:layout_constraintVertical_bias="0.023" />
 </androidx.constraintlayout.widget.ConstraintLayout>
