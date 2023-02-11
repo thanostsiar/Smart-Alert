@@ -28,7 +28,6 @@ public class SignUp extends AppCompatActivity {
     FirebaseAuth mAuth;
     User user;
     FirebaseDatabase database;
-
     DatabaseReference reference;
     Button btn_sign_up2;
     @Override
@@ -85,6 +84,9 @@ public class SignUp extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
                                 addDataToDatabase(nameTxt, surnameTxt, phoneTxt, emailTxt, passTxt);
+                                Intent intent = new Intent(SignUp.this, HomeActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(SignUp.this, "User was created successfully!", Toast.LENGTH_SHORT).show();
                             }
                             else{
                                 Toast.makeText(SignUp.this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -105,14 +107,13 @@ public class SignUp extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //reference.setValue(user);
                 reference.child(mAuth.getUid()).setValue(user);
-                Toast.makeText(SignUp.this, "User was created successfully!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(SignUp.this, "User was created successfully!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(SignUp.this, "Failed create user!. " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUp.this, "Failed to create user! " + error, Toast.LENGTH_SHORT).show();
             }
         });
     }
