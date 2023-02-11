@@ -13,9 +13,12 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".HomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".SignUp"
             android:exported="false"
-            android:parentActivityName=".SignIn"/>
+            android:parentActivityName=".SignIn" />
         <activity
             android:name=".SignIn"
             android:exported="true">
