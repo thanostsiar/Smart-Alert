@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="176dp"
     android:gravity="bottom"
     android:padding="16dp"
-    android:background="@drawable/headerbg"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    >
+    android:background="@drawable/header_bg"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:cardCornerRadius="35dp"
+        app:cardBackgroundColor="@color/md_white_1000"
+        android:layout_marginBottom="49dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/navImage"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:onClick="toProfile"
+            android:scaleType="centerCrop"
+            android:src="@drawable/person"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/navName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:layout_marginTop="-50dp"
+        android:textColor="@color/md_white_1000"
+        android:textStyle="bold" />
 
 
 </LinearLayout>

@@ -17,7 +17,7 @@ import java.util.Locale;
 public class UserProfile extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     String[] countryNames={"English","Ελληνικά"};
-    int flags[] = {R.drawable.uk_flag, R.drawable.gre_flag};
+    int[] flags = {R.drawable.uk_flag, R.drawable.gre_flag};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

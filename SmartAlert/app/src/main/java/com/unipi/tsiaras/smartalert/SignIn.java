@@ -49,7 +49,7 @@ public class SignIn extends AppCompatActivity {
             mAuth.signInWithEmailAndPassword(emailTxt, passTxt)
                     .addOnCompleteListener((task) ->{
                         if (task.isSuccessful()){
-                            Intent intent = new Intent(this, HomeActivity.class);
+                            Intent intent = new Intent(this, MainActivity.class);
                             startActivity(intent);
                             Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
                         }

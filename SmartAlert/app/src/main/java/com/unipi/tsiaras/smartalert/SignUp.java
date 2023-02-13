@@ -1,7 +1,6 @@
 package com.unipi.tsiaras.smartalert;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -84,7 +82,7 @@ public class SignUp extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
                                 addDataToDatabase(nameTxt, surnameTxt, phoneTxt, emailTxt, passTxt);
-                                Intent intent = new Intent(SignUp.this, HomeActivity.class);
+                                Intent intent = new Intent(SignUp.this, MainActivity.class);
                                 startActivity(intent);
                                 Toast.makeText(SignUp.this, "User was created successfully!", Toast.LENGTH_SHORT).show();
                             }
