@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SmartAlert</string>
+    <string name="open_nav">Open Navigation Drawer</string>
+    <string name="close_nav">Close Navigation Drawer</string>
+    <string name="hint_name">Όνομα</string>
+    <string name="hint_surname">Επίθετο</string>
+    <string name="hint_password">Κωδικός</string>
+    <string name="button_sign_in">Είσοδος</string>
+    <string name="button_sign_up">Εγγραφή</string>
+    <string name="button_send">Αποστολή</string>
+    <string name="text_forgot_password">Ξεχάσατε τον κωδικό?</string>
+    <string name="text_signin_message">Γεια σας, συνδεθείτε στον λογαριασμό σας</string>
+    <string name="text_signin_signup">Δεν έχετε λογαριασμό? <b>Εγγραφείτε τώρα</b></string>
+    <string name="text_signup_signin">Έχετε ήδη λογαριασμό? <b>Συνδεθείτε</b></string>
+    <string name="text_signup_message">Γεια σας, ας φτιάξουμε τον λογαριασμό σας</string>
+    <string name="select_language">Επιλογή Γλώσσας</string>
+    <string name="apply_profile">Εφαρμογή</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_phone">Τηλέφωνο</string>
+    <string name="hint_confirm_password">Επαλήθευση Κωδικού</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">Κεντρική Σελίδα</string>
+    <string name="sign_out_item_android_id">Αποσύνδεση</string>
+    <string name="home_fragment">Κεντρική Σελίδα</string>
+    <string name="new_alert">Νέα Ειδοποίηση</string>
+    <string name="alert_form">Ποια είναι η έκτακτη περίσταση?</string>
+    <string name="alert_form_textview">Επιλέξτε την φυσική καταστροφή:</string>
+    <string name="alert_form_btnimage">Διαλέξτε Εικόνα</string>
+    <string name="alert_form_btn">Αποστολή έκτακτου μηνύματος</string>
+</resources>

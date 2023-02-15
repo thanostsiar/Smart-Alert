@@ -26,7 +26,7 @@
         android:background="@drawable/button_alert"
         android:backgroundTint="@null"
         android:drawableEnd="@drawable/ic_plus"
-        android:text="New Alert"
+        android:text="@string/new_alert"
         android:textSize="24sp"
         app:iconTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"

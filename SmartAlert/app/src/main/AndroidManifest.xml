@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
     <application
         android:allowBackup="true"
@@ -13,17 +16,24 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".AlertForm"
+            android:exported="false" />
+        <activity
             android:name=".UserProfile"
+            android:configChanges="locale|orientation"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:configChanges="locale|orientation"
             android:exported="false" />
         <activity
             android:name=".SignUp"
+            android:configChanges="locale|orientation"
             android:exported="false"
             android:parentActivityName=".SignIn" />
         <activity
             android:name=".SignIn"
+            android:configChanges="locale|orientation"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
