@@ -13,18 +13,37 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.sql.Timestamp;
 
 public class AlertForm extends AppCompatActivity {
     EditText et;
     Button btn_img;
     Button btn_apply;
+    Alert alert;
+    LocationManager mLocationManager;
+    FirebaseAuth mAuth;
+    FirebaseDatabase database;
+    DatabaseReference reference;
     private static final int REQUEST_CODE_PERMISSIONS = 101;
     private static final String[] REQUIRED_PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -39,6 +58,10 @@ public class AlertForm extends AppCompatActivity {
         et = findViewById(R.id.alert_et);
         btn_img = findViewById(R.id.alert_btnimage);
         btn_apply = findViewById(R.id.alert_btn);
+        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference("alerts");
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Choose the natural disaster")
                 .setItems(options, new DialogInterface.OnClickListener() {
@@ -85,6 +108,38 @@ public class AlertForm extends AppCompatActivity {
                 }
             }
         });
+
+        btn_apply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alert = new Alert();
+                if(!TextUtils.isEmpty(et.getText().toString())){
+                    if (ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                            PackageManager.PERMISSION_GRANTED &&
+                            ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                                    PackageManager.PERMISSION_GRANTED) {
+                        Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                        String ts = timestamp.toString();
+                        String latitude = loc.getLatitude()+"";
+                        String longitude = loc.getLongitude()+"";
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        String uid = user.getUid();
+                        alert.setDisaster(et.getText().toString());
+                        alert.setLatitude(latitude);
+                        alert.setLongitude(longitude);
+                        alert.setTimestamp(ts);
+                        alert.setUid(uid);
+                        //Add alert to database
+                        reference.child(uid).push().setValue(alert);
+                        Toast.makeText(AlertForm.this, "Alert was sent!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        ActivityCompat.requestPermissions(AlertForm.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
+                    }
+                }
+            }
+        });
+
 
     }
     @Override
