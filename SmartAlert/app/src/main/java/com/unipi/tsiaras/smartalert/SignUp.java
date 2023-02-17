@@ -1,24 +1,44 @@
 package com.unipi.tsiaras.smartalert;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class SignUp extends AppCompatActivity {
 
@@ -32,6 +52,7 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
         name = findViewById(R.id.et_name);
         surname = findViewById(R.id.et_surname);
         phone = findViewById(R.id.et_phone);
@@ -40,18 +61,22 @@ public class SignUp extends AppCompatActivity {
         conf_pass = findViewById(R.id.et_confirm_password);
         btn_sign_up2 = findViewById(R.id.button_signup2);
 
+        user = new User();
+
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         reference = database.getReference("users");
+
+
         btn_sign_up2.setOnClickListener(v -> {
             OpenSignIn();
         });
     }
+
     public void OpenSignIn(){
         Intent intent = new Intent(getApplicationContext(), SignIn.class);
         startActivity(intent);
     }
-
 
     public void signUp(View view){
 
@@ -62,8 +87,6 @@ public class SignUp extends AppCompatActivity {
         String emailTxt = email.getText().toString();
         String passTxt = pass.getText().toString();
         String conf_passTxt = conf_pass.getText().toString();
-
-        user = new User();
 
         // Check if user filled all the blanks.
         if (nameTxt.isEmpty() || surnameTxt.isEmpty() || phoneTxt.isEmpty() || emailTxt.isEmpty() || passTxt.isEmpty() || conf_passTxt.isEmpty()){
@@ -91,10 +114,13 @@ public class SignUp extends AppCompatActivity {
                             }
                         }
                     });
+
+
+
         }
     }
 
-    private void addDataToDatabase(String Name, String Surname, String Phone, String Email, String Password){
+    private void addDataToDatabase(String Name, String Surname, String Phone, String Email, String Password) {
 
         user.setName(Name);
         user.setSurname(Surname);
@@ -106,7 +132,6 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 reference.child(mAuth.getUid()).setValue(user);
-                //Toast.makeText(SignUp.this, "User was created successfully!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
