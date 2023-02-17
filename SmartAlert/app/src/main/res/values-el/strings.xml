@@ -29,4 +29,5 @@
     <string name="alert_form_textview">Επιλέξτε την φυσική καταστροφή:</string>
     <string name="alert_form_btnimage">Διαλέξτε Εικόνα</string>
     <string name="alert_form_btn">Αποστολή έκτακτου μηνύματος</string>
+    <string name="profile">Προφίλ</string>
 </resources>
