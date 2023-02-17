@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/alert_disaster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Alert Disaster"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/alert_latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Alert Latitude"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/alert_longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Alert Longitude"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/alert_ts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Alert Timestamp"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/alert_item_btn_accept"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/md_green_A400"
+        android:text="Accept"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/alert_item_btn_decline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/md_red_A700"
+        android:text="Decline" />
+
+
+</LinearLayout>
