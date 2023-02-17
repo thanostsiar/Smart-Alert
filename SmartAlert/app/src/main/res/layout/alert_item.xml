@@ -15,6 +15,25 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="163dp"
+            android:layout_height="143dp"
+            app:cardBackgroundColor="@color/md_grey_300"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            android:layout_marginLeft="200dp"
+            android:layout_marginTop="10dp"
+            app:cardUseCompatPadding="true">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/alert_image">
+
+            </ImageView>
+
+        </androidx.cardview.widget.CardView>
+
             <TextView
                 android:id="@+id/alert_disaster"
                 android:layout_width="wrap_content"
@@ -63,14 +82,14 @@
                 android:text="Accept"
                 android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/alert_item_btn_decline"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@color/md_red_A700"
-            android:text="Decline"
-            android:textSize="16sp" />
+            <Button
+                android:id="@+id/alert_item_btn_decline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/md_red_A700"
+                android:text="Decline"
+                android:textSize="16sp" />
 
 
     </LinearLayout>
