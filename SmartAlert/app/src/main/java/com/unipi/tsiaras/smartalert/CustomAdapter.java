@@ -28,6 +28,12 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
+        if(i==0){
+            return "English";
+        }
+        else if(i==1){
+            return "Ελληνικά";
+        }
         return null;
     }
 
