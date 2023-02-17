@@ -1,57 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <TextView
-        android:id="@+id/alert_disaster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Alert Disaster"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/alert_latitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Alert Latitude"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/alert_longitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Alert Longitude"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/alert_ts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Alert Timestamp"
-        android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/alert_item_btn_accept"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@color/md_green_A400"
-        android:text="Accept"
-        android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/alert_item_btn_decline"
+        app:cardBackgroundColor="@color/md_grey_300"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@color/md_red_A700"
-        android:text="Decline" />
+        android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/alert_disaster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Alert Disaster"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/alert_latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Alert Latitude"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/alert_longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Alert Longitude"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/alert_ts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Alert Timestamp"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/alert_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Alert Comment"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/alert_item_btn_accept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/md_green_A400"
+                android:text="Accept"
+                android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/alert_item_btn_decline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/md_red_A700"
+            android:text="Decline"
+            android:textSize="16sp" />
 
 
-</LinearLayout>
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

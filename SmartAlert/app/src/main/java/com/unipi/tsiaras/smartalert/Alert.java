@@ -2,12 +2,16 @@ package com.unipi.tsiaras.smartalert;
 
 public class Alert {
 
-    private String uid, disaster, timestamp, latitude, longitude, img_url;
+    private String uid, disaster, timestamp, latitude, longitude, img_url, comments;
 
     public Alert(){
 
     }
 
+    public String getComments() {return comments;}
+    public void setComments(String comments){
+        this.comments = comments;
+    }
     public String getUid() {
         return uid;
     }
