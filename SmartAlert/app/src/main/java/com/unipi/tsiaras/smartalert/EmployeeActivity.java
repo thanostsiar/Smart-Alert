@@ -11,17 +11,30 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class EmployeeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DrawerLayout drawerLayout;
+    TextView email;
 
+    NavigationView navigationView;
+    private DrawerLayout drawerLayout;
     FirebaseAuth mAuth;
 
+    FirebaseDatabase database;
+
+    DatabaseReference usersRef;
+
+    View headerView;
     Toolbar toolbar;
 
     @Override
@@ -30,6 +43,16 @@ public class EmployeeActivity extends AppCompatActivity implements NavigationVie
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+
+        database = FirebaseDatabase.getInstance();
+
+        usersRef = database.getReference("civil protection");
+
+        navigationView = findViewById(R.id.nav_view);
+
+        headerView = navigationView.getHeaderView(0);
+
+        email = headerView.findViewById(R.id.navEmail);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -45,6 +68,24 @@ public class EmployeeActivity extends AppCompatActivity implements NavigationVie
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EmployeeFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
+        }
+
+        if (mAuth.getCurrentUser() != null){
+            String userId = mAuth.getUid();
+            usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        String emailDB = snapshot.child(userId).child("email").getValue(String.class);
+                        email.append(emailDB);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
     }
 
