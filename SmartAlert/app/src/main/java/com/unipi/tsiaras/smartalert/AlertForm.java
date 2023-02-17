@@ -1,5 +1,6 @@
 package com.unipi.tsiaras.smartalert;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -10,6 +11,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,11 +23,15 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,36 +39,52 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.sql.Timestamp;
 
 public class AlertForm extends AppCompatActivity {
     EditText et;
+    ImageView imageView;
     Button btn_img;
     Button btn_apply;
     Alert alert;
     LocationManager mLocationManager;
     FirebaseAuth mAuth;
     FirebaseDatabase database;
-    DatabaseReference reference;
+    DatabaseReference databaseReference;
+    ProgressBar progressBar;
+    Uri imageUri;
+    StorageReference storageReference;
     private static final int REQUEST_CODE_PERMISSIONS = 101;
     private static final String[] REQUIRED_PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    private ActivityResultLauncher<String> mGetContent;
+
+    private ActivityResultLauncher<Intent> activityResultLauncher;
     final String[] options = {"Flood", "Fire", "Earthquake", "Hurricane"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alert_form);
+
         et = findViewById(R.id.alert_et);
+        imageView = findViewById(R.id.alert_imageview);
         btn_img = findViewById(R.id.alert_btnimage);
         btn_apply = findViewById(R.id.alert_btn);
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        reference = database.getReference("alerts");
+        databaseReference = database.getReference("alerts");
+        storageReference = FirebaseStorage.getInstance().getReference();
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
+        alert = new Alert();
+
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Choose the natural disaster")
                 .setItems(options, new DialogInterface.OnClickListener() {
@@ -85,13 +108,16 @@ public class AlertForm extends AppCompatActivity {
             }
         });
 
-        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
-            public void onActivityResult(Uri result) {
-                if (result != null) {
-                    // Do something with the selected image, such as displaying it in an ImageView
-                    ImageView imageView = findViewById(R.id.alert_imageview);
-                    imageView.setImageURI(result);
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    imageUri = data.getData();
+                    imageView.setImageURI(imageUri);
+                }
+                else {
+                    Toast.makeText(AlertForm.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -105,7 +131,10 @@ public class AlertForm extends AppCompatActivity {
                     ActivityCompat.requestPermissions(AlertForm.this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
                 } else {
                     // The required permissions are already granted
-                    mGetContent.launch("image/*");
+                    Intent photoPicker = new Intent();
+                    photoPicker.setAction(Intent.ACTION_GET_CONTENT);
+                    photoPicker.setType("image/*");
+                    activityResultLauncher.launch(photoPicker);
                 }
             }
         });
@@ -114,28 +143,32 @@ public class AlertForm extends AppCompatActivity {
         btn_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alert = new Alert();
                 if(!TextUtils.isEmpty(et.getText().toString())){
                     if (ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                             PackageManager.PERMISSION_GRANTED &&
                             ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
                                     PackageManager.PERMISSION_GRANTED) {
                         Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        String uid = user.getUid();
                         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                         String ts = timestamp.toString();
                         String latitude = loc.getLatitude()+"";
                         String longitude = loc.getLongitude()+"";
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        String uid = user.getUid();
-                        alert.setDisaster(et.getText().toString());
-                        alert.setLatitude(latitude);
-                        alert.setLongitude(longitude);
-                        alert.setTimestamp(ts);
-                        alert.setUid(uid);
-                        //Add alert to database
-                        reference.push().setValue(alert);
-                        Toast.makeText(AlertForm.this, "Alert was sent!", Toast.LENGTH_SHORT).show();
-                    } else {
+
+                        if (imageUri != null) {
+                            uploadToFirebase(imageUri, ts, latitude, longitude);
+                        }
+                        else {
+                            alert.setDisaster(et.getText().toString());
+                            alert.setLatitude(latitude);
+                            alert.setLongitude(longitude);
+                            alert.setTimestamp(ts);
+                            alert.setUid(uid);
+                            databaseReference.push().setValue(alert);
+                        }
+                    }
+                    else {
                         ActivityCompat.requestPermissions(AlertForm.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
                     }
                 }
@@ -150,11 +183,60 @@ public class AlertForm extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 // The required permissions are granted
-                mGetContent.launch("image/*");
+                Intent photoPicker = new Intent();
+                photoPicker.setAction(Intent.ACTION_GET_CONTENT);
+                photoPicker.setType("image/*");
+                activityResultLauncher.launch(photoPicker);
             } else {
                 // The required permissions are not granted so we ask them again
                 ActivityCompat.requestPermissions(AlertForm.this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
             }
         }
+    }
+
+    private void uploadToFirebase(Uri uri, String timeStamp, String lat, String lon) {
+        FirebaseUser user = mAuth.getCurrentUser();
+        String uid = user.getUid();
+
+        final StorageReference imageReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(uri));
+
+        imageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                imageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        alert.setDisaster(et.getText().toString());
+                        alert.setTimestamp(timeStamp);
+                        alert.setLatitude(lat);
+                        alert.setLongitude(lon);
+                        alert.setUid(uid);
+                        alert.setImg_url(uri.toString());
+
+                        String key = databaseReference.push().getKey();
+                        databaseReference.child(key).setValue(alert);
+                        progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(AlertForm.this, "Created Alert!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(AlertForm.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String getFileExtension(Uri fileUri) {
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(contentResolver.getType(fileUri));
     }
 }
