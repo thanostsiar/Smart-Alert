@@ -29,14 +29,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.065"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="20dp">
 
         </TextView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="91dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="40dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -59,6 +59,38 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="60dp"
                 android:focusable="false">
+
+            </EditText>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="91dp"
+            android:layout_marginTop="10dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/alert_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="55dp"
+                android:layout_marginTop="1dp"
+                android:fontFamily="sans-serif-black"
+                android:text="@string/alert_form_textview2"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/alert_et2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="55dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="60dp"
+                android:inputType="textMultiLine"
+                >
 
             </EditText>
 
@@ -100,12 +132,11 @@
             android:layout_width="183dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="120dp"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="40dp"
             android:background="@drawable/button1_bg"
             android:text="@string/alert_form_btn"
             android:textSize="20sp"
             android:textStyle="bold" />
-
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

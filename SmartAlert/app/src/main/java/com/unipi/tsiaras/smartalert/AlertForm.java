@@ -47,12 +47,13 @@ import com.google.firebase.storage.UploadTask;
 import java.sql.Timestamp;
 
 public class AlertForm extends AppCompatActivity {
-    EditText et;
     ImageView imageView;
+    EditText et,et2;
     Button btn_img;
     Button btn_apply;
     Alert alert;
     LocationManager mLocationManager;
+    Location loc;
     FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference databaseReference;
@@ -60,6 +61,7 @@ public class AlertForm extends AppCompatActivity {
     Uri imageUri;
     StorageReference storageReference;
     private static final int REQUEST_CODE_PERMISSIONS = 101;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
     private static final String[] REQUIRED_PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -74,6 +76,7 @@ public class AlertForm extends AppCompatActivity {
 
         et = findViewById(R.id.alert_et);
         imageView = findViewById(R.id.alert_imageview);
+        et2 = findViewById(R.id.alert_et2);
         btn_img = findViewById(R.id.alert_btnimage);
         btn_apply = findViewById(R.id.alert_btn);
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -104,7 +107,15 @@ public class AlertForm extends AppCompatActivity {
         et.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.show();
+                if (ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                                PackageManager.PERMISSION_GRANTED) {
+                    loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    dialog.show();
+                } else {
+                    ActivityCompat.requestPermissions(AlertForm.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
+                }
             }
         });
 
@@ -143,40 +154,40 @@ public class AlertForm extends AppCompatActivity {
         btn_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!TextUtils.isEmpty(et.getText().toString())){
-                    if (ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-                            PackageManager.PERMISSION_GRANTED &&
-                            ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                                    PackageManager.PERMISSION_GRANTED) {
-                        Location loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        String uid = user.getUid();
-                        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                        String ts = timestamp.toString();
-                        String latitude = loc.getLatitude()+"";
-                        String longitude = loc.getLongitude()+"";
-
-                        if (imageUri != null) {
-                            uploadToFirebase(imageUri, ts, latitude, longitude);
-                        }
-                        else {
-                            alert.setDisaster(et.getText().toString());
-                            alert.setLatitude(latitude);
-                            alert.setLongitude(longitude);
-                            alert.setTimestamp(ts);
-                            alert.setUid(uid);
-                            databaseReference.push().setValue(alert);
-                        }
-                    }
-                    else {
-                        ActivityCompat.requestPermissions(AlertForm.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
-                    }
-                }
+                apply_alert(loc);
+                
             }
-        });
 
+            });
 
     }
+
+    public void apply_alert(Location loc){
+        alert = new Alert();
+        if(!TextUtils.isEmpty(et.getText().toString())){
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                String ts = timestamp.toString();
+                String latitude = loc.getLatitude()+"";
+                String longitude = loc.getLongitude()+"";
+                FirebaseUser user = mAuth.getCurrentUser();
+                String uid = user.getUid();
+            if (imageUri != null) {
+                uploadToFirebase(imageUri, ts, latitude, longitude);
+            } else {
+                alert.setDisaster(et.getText().toString());
+                alert.setComments(et2.getText().toString());
+                alert.setLatitude(latitude);
+                alert.setLongitude(longitude);
+                alert.setTimestamp(ts);
+                alert.setUid(uid);
+                //Add alert to database
+                databaseReference.push().setValue(alert);
+                Toast.makeText(AlertForm.this, "Alert was sent!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -192,6 +203,12 @@ public class AlertForm extends AppCompatActivity {
                 ActivityCompat.requestPermissions(AlertForm.this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
             }
         }
+        /*if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted, do something with location
+                apply_alert(loc);
+            }
+        }*/
     }
 
     private void uploadToFirebase(Uri uri, String timeStamp, String lat, String lon) {
@@ -207,6 +224,7 @@ public class AlertForm extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         alert.setDisaster(et.getText().toString());
+                        alert.setComments(et2.getText().toString());
                         alert.setTimestamp(timeStamp);
                         alert.setLatitude(lat);
                         alert.setLongitude(lon);

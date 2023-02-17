@@ -99,6 +99,7 @@ public class EmployeeFragment extends Fragment {
             holder.latitudeTextView.setText(alert.getLatitude());
             holder.longitudeTextView.setText(alert.getLongitude());
             holder.timestampTextView.setText(alert.getTimestamp());
+            holder.commentTextView.setText(alert.getComments());
         }
 
         @Override
@@ -108,10 +109,7 @@ public class EmployeeFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final TextView disasterTextView;
-            public final TextView latitudeTextView;
-            public final TextView longitudeTextView;
-            public final TextView timestampTextView;
+            public final TextView disasterTextView,commentTextView,latitudeTextView,longitudeTextView,timestampTextView;
 
             public ViewHolder(View view) {
                 super(view);
@@ -120,6 +118,7 @@ public class EmployeeFragment extends Fragment {
                 latitudeTextView = view.findViewById(R.id.alert_latitude);
                 longitudeTextView = view.findViewById(R.id.alert_longitude);
                 timestampTextView = view.findViewById(R.id.alert_ts);
+                commentTextView = view.findViewById(R.id.alert_comment);
             }
         }
     }

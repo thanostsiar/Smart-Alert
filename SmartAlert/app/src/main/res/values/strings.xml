@@ -26,6 +26,7 @@
     <string name="new_alert">New Alert</string>
     <string name="alert_form">What is the emergency alert?</string>
     <string name="alert_form_textview">Please choose the natural disaster:</string>
+    <string name="alert_form_textview2">Please write any useful comments:</string>
     <string name="alert_form_btnimage">Choose Image</string>
     <string name="alert_form_btn">Send Alert</string>
     <string name="profile">Profile</string>
