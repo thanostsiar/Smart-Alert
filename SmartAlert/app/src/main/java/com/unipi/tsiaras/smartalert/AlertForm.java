@@ -155,7 +155,7 @@ public class AlertForm extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 apply_alert(loc);
-                
+
             }
 
             });
@@ -203,12 +203,6 @@ public class AlertForm extends AppCompatActivity {
                 ActivityCompat.requestPermissions(AlertForm.this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
             }
         }
-        /*if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted, do something with location
-                apply_alert(loc);
-            }
-        }*/
     }
 
     private void uploadToFirebase(Uri uri, String timeStamp, String lat, String lon) {
