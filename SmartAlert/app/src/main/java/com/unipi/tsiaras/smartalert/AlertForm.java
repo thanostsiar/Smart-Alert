@@ -96,6 +96,7 @@ public class AlertForm extends AppCompatActivity {
             }
         });
 
+        //Button to select image
         btn_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +110,7 @@ public class AlertForm extends AppCompatActivity {
             }
         });
 
+        //Button to send alert
         btn_apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,7 +133,7 @@ public class AlertForm extends AppCompatActivity {
                         alert.setTimestamp(ts);
                         alert.setUid(uid);
                         //Add alert to database
-                        reference.child(uid).push().setValue(alert);
+                        reference.push().setValue(alert);
                         Toast.makeText(AlertForm.this, "Alert was sent!", Toast.LENGTH_SHORT).show();
                     } else {
                         ActivityCompat.requestPermissions(AlertForm.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);

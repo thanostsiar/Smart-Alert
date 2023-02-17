@@ -18,6 +18,12 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".EmployeeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EmployeeFragment"
+            android:exported="false" />
+        <activity
             android:name=".AlertForm"
             android:exported="false" />
         <activity

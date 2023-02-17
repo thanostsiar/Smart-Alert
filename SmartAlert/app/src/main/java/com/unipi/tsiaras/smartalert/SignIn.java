@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignIn extends AppCompatActivity {
 
@@ -17,6 +19,9 @@ public class SignIn extends AppCompatActivity {
     EditText email, pass;
     Button btn_sign_up;
     Button btn_sign_in;
+    FirebaseDatabase database;
+    DatabaseReference reference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +32,8 @@ public class SignIn extends AppCompatActivity {
         btn_sign_in = findViewById(R.id.button_signin);
 
         mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference();
         btn_sign_up.setOnClickListener(v -> {
             OpenSignUp();
         });
@@ -49,9 +56,16 @@ public class SignIn extends AppCompatActivity {
             mAuth.signInWithEmailAndPassword(emailTxt, passTxt)
                     .addOnCompleteListener((task) ->{
                         if (task.isSuccessful()){
-                            Intent intent = new Intent(this, MainActivity.class);
+                            Intent intent;
+                            if(emailTxt.contains("@gov.gr")){
+                                intent = new Intent(this, EmployeeActivity.class);
+                            }
+                            else{
+                                intent = new Intent(this, MainActivity.class);
+                            }
                             startActivity(intent);
                             Toast.makeText(this, "Success!", Toast.LENGTH_SHORT).show();
+
                         }
                         else{
                             Toast.makeText(this, task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -59,4 +73,6 @@ public class SignIn extends AppCompatActivity {
                     });
         }
     }
+
+
 }
