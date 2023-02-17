@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,7 +43,6 @@ public class EmployeeFragment extends Fragment {
         adapter = new YourAdapter(alerts);
         alert_list.setAdapter(adapter);
 
-        //EDO EINAI TO PROVLIMA PREPEI NA PAREI TO UID TOY USER KAI OXI TOY ADMIN
         mDatabase = FirebaseDatabase.getInstance().getReference().child("alerts");
         Log.d("Firebase", "Database reference: " + mDatabase.toString());
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -100,6 +101,8 @@ public class EmployeeFragment extends Fragment {
             holder.longitudeTextView.setText(alert.getLongitude());
             holder.timestampTextView.setText(alert.getTimestamp());
             holder.commentTextView.setText(alert.getComments());
+            String imageUrl = alert.getImg_url();
+            Glide.with(getContext()).load(imageUrl).into(holder.alertimageview);
         }
 
         @Override
@@ -110,6 +113,7 @@ public class EmployeeFragment extends Fragment {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView disasterTextView,commentTextView,latitudeTextView,longitudeTextView,timestampTextView;
+            public final ImageView alertimageview;
 
             public ViewHolder(View view) {
                 super(view);
@@ -119,6 +123,7 @@ public class EmployeeFragment extends Fragment {
                 longitudeTextView = view.findViewById(R.id.alert_longitude);
                 timestampTextView = view.findViewById(R.id.alert_ts);
                 commentTextView = view.findViewById(R.id.alert_comment);
+                alertimageview = view.findViewById(R.id.alert_image);
             }
         }
     }
