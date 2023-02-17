@@ -2,10 +2,17 @@ package com.unipi.tsiaras.smartalert;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -146,11 +153,12 @@ public class EmployeeFragment extends Fragment {
                         Boolean loc_circle = isLocationWithinCircle(Double.parseDouble(latitudeTextView.getText().toString()),Double.parseDouble(longitudeTextView.getText().toString()),centerLat,centerLon,radius);
 
                         if(loc_circle){
-                            
+                            showNotification();
                         }
                     }
 
                 });
+
 
             }
         }
@@ -164,6 +172,24 @@ public class EmployeeFragment extends Fragment {
             double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
             double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             return EARTH_RADIUS * c;
+        }
+        private void showNotification() {
+            NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("channel_id", "channel_name", NotificationManager.IMPORTANCE_DEFAULT);
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "channel_id")
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle("Notification Title")
+                    .setContentText("Notification Text")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(PendingIntent.getActivity(getContext(), 0, new Intent(), 0))
+                    .setAutoCancel(true);
+
+            notificationManager.notify(0, builder.build());
         }
     }
 }
