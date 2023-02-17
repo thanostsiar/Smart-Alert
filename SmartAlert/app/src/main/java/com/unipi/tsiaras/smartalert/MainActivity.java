@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawerLayout;
 
-    TextView name, email;
+    TextView email;
 
     FirebaseAuth mAuth;
 
@@ -66,8 +66,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         headerView = navigationView.getHeaderView(0);
 
-        name = headerView.findViewById(R.id.navName);
-
         email = headerView.findViewById(R.id.navEmail);
 
         toolbar = findViewById(R.id.toolbar);
@@ -92,9 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-                        String nameDB = snapshot.child(userId).child("name").getValue(String.class);
                         String emailDB = snapshot.child(userId).child("email").getValue(String.class);
-                        name.append(nameDB);
                         email.append(emailDB);
                     }
                 }
@@ -104,55 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 }
             });
-            /*usersRef.child(userId).child("image").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        String imageUrl = snapshot.child()
-                    }
-                    //String imageUrl = snapshot.getValue(String.class);
-                    Picasso.get().load(imageUrl).into(imageView);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });*/
-            /*usersRef.child(userId).child("image").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String imageUrl = snapshot.getValue(String.class);
-                    if (imageUrl != null) {
-                        Picasso.get().load(imageUrl).into(imageView);
-                        //imageView.setImageResource(R.drawable.person);
-                        //storageReference.child(imageUrl).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            /*@Override
-                            public void onSuccess(Uri uri) {
-                                imageView.setImageResource(R.drawable.person);
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("Error", "onCancelled", error.toException());
-                }
-            });*/
         }
-
-        //storageReference = storage.getReference().child("2131165429");
-
-        /*storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                if (imageView != null) {
-                    //Picasso.get().load(uri).into(imageView);
-                    imageView.setImageResource(R.drawable.person);
-                }
-            }
-        });*/
     }
 
     @Override
