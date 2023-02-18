@@ -2,6 +2,7 @@ package com.unipi.tsiaras.smartalert;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -78,10 +79,7 @@ public class EmployeeFragment extends Fragment {
         });
 
 
-
-
-
-        // Inflate the layout for this fragment
+            // Inflate the layout for this fragment
         return view;
     }
 
@@ -113,6 +111,7 @@ public class EmployeeFragment extends Fragment {
             holder.timestampTextView.setText(alert.getTimestamp());
             holder.commentTextView.setText(alert.getComments());
             String imageUrl = alert.getImg_url();
+
             Glide.with(getContext()).load(imageUrl).into(holder.alertimageview);
         }
 
@@ -126,9 +125,6 @@ public class EmployeeFragment extends Fragment {
             public final TextView disasterTextView,commentTextView,latitudeTextView,longitudeTextView,timestampTextView;
             public final ImageView alertimageview;
             Button btn_apply,btn_cancel;
-            double centerLat = 37.7749; // Center latitude
-            double centerLon = -122.4194; // Center longitude
-            double radius = 3.0; // Radius of the circle in kilometers
 
 
 
@@ -143,53 +139,20 @@ public class EmployeeFragment extends Fragment {
                 alertimageview = view.findViewById(R.id.alert_image);
                 btn_apply = view.findViewById(R.id.alert_item_btn_accept);
                 btn_cancel = view.findViewById(R.id.alert_item_btn_decline);
-                double latBoundaryNorth = centerLat + Math.toDegrees(radius / EARTH_RADIUS);
-                double latBoundarySouth = centerLat - Math.toDegrees(radius / EARTH_RADIUS);
-                double lonBoundaryEast = centerLon + Math.toDegrees(radius / EARTH_RADIUS / Math.cos(Math.toRadians(centerLat)));
-                double lonBoundaryWest = centerLon - Math.toDegrees(radius / EARTH_RADIUS / Math.cos(Math.toRadians(centerLat)));
+
                 btn_apply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Boolean loc_circle = isLocationWithinCircle(Double.parseDouble(latitudeTextView.getText().toString()),Double.parseDouble(longitudeTextView.getText().toString()),centerLat,centerLon,radius);
 
-                        if(loc_circle){
-                            showNotification();
-                        }
                     }
-
                 });
 
 
             }
         }
-        public boolean isLocationWithinCircle(double lat, double lon, double centerLat, double centerLon, double radius) {
-            double distance = haversine(lat, lon, centerLat, centerLon);
-            return distance <= radius;
-        }
-        public double haversine(double lat1, double lon1, double lat2, double lon2) {
-            double dLat = Math.toRadians(lat2 - lat1);
-            double dLon = Math.toRadians(lon2 - lon1);
-            double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return EARTH_RADIUS * c;
-        }
-        private void showNotification() {
-            NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel channel = new NotificationChannel("channel_id", "channel_name", NotificationManager.IMPORTANCE_DEFAULT);
-                notificationManager.createNotificationChannel(channel);
-            }
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "channel_id")
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("Notification Title")
-                    .setContentText("Notification Text")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(PendingIntent.getActivity(getContext(), 0, new Intent(), 0))
-                    .setAutoCancel(true);
 
-            notificationManager.notify(0, builder.build());
-        }
+
     }
 }
