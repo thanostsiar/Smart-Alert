@@ -29,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import java.util.List;
 public class EmployeeFragment extends Fragment {
 
     private DatabaseReference mDatabase;
+    Query query;
     FirebaseAuth mAuth;
     RecyclerView alert_list;
     YourAdapter adapter;
@@ -54,9 +56,9 @@ public class EmployeeFragment extends Fragment {
         adapter = new YourAdapter(alerts);
         alert_list.setAdapter(adapter);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("alerts");
-        Log.d("Firebase", "Database reference: " + mDatabase.toString());
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        //mDatabase = FirebaseDatabase.getInstance().getReference().child("alerts");
+        query = FirebaseDatabase.getInstance().getReference("alerts").orderByChild("weight");
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Alert> alerts = new ArrayList<>();
@@ -64,7 +66,6 @@ public class EmployeeFragment extends Fragment {
                 for (DataSnapshot alertSnapshot : dataSnapshot.getChildren()) {
                     Alert alert = alertSnapshot.getValue(Alert.class);
                     alerts.add(alert);
-                    Log.d(TAG, "Alert: " + alert.getDisaster() + ", " + alert.getLatitude() + ", " + alert.getLongitude() + ", " + alert.getTimestamp());
                 }
                 Log.d(TAG, "Number of alerts: " + alerts.size());
 
