@@ -1,5 +1,7 @@
 package com.unipi.tsiaras.smartalert;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,6 +24,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -38,6 +41,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -45,6 +49,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class AlertForm extends AppCompatActivity {
     ImageView imageView;
@@ -57,8 +64,10 @@ public class AlertForm extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference databaseReference;
+    Query query;
     ProgressBar progressBar;
     Uri imageUri;
+    int weight_final = 2;
     StorageReference storageReference;
     private static final int REQUEST_CODE_PERMISSIONS = 101;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
@@ -114,7 +123,7 @@ public class AlertForm extends AppCompatActivity {
                     loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     dialog.show();
                 } else {
-                    ActivityCompat.requestPermissions(AlertForm.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
+                    ActivityCompat.requestPermissions(AlertForm.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
                 }
             }
         });
@@ -126,8 +135,7 @@ public class AlertForm extends AppCompatActivity {
                     Intent data = result.getData();
                     imageUri = data.getData();
                     imageView.setImageURI(imageUri);
-                }
-                else {
+                } else {
                     Toast.makeText(AlertForm.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -150,19 +158,62 @@ public class AlertForm extends AppCompatActivity {
             }
         });
 
+
         //Button to send alert
         btn_apply.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                apply_alert(loc);
+                getweight(new WeightListener() {
+                    @Override
+                    public void onWeightReceived(int weight) {
+                        weight_final = weight;
+                        System.out.println(weight_final);
+                        apply_alert(loc, weight_final);
+                    }
+                });
 
             }
-
-            });
-
+        });
     }
 
-    public void apply_alert(Location loc){
+    public interface WeightListener  {
+        void onWeightReceived(int weight);
+    }
+
+    public void getweight(WeightListener  listener){
+        query = FirebaseDatabase.getInstance().getReference("alerts");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int weight_ = 2;
+                for (DataSnapshot alertSnapshot : dataSnapshot.getChildren()) {
+                    Alert alert = alertSnapshot.getValue(Alert.class);
+                    System.out.println(alert.getDisaster());
+                    System.out.println(et.getText());
+                    int lat = (int) Double.parseDouble(alert.getLatitude());
+                    System.out.println(lat);
+                    int lon = (int) Double.parseDouble(alert.getLongitude());
+                    System.out.println(lon);
+                    int lat_this = (int) Double.parseDouble(String.valueOf(loc.getLatitude()));
+                    System.out.println(lat_this);
+                    int lon_this = (int) Double.parseDouble(String.valueOf(loc.getLongitude()));
+                    System.out.println(lon_this);
+                    if (alert.getDisaster().equals(et.getText().toString()) && lat==lat_this && lon==lon_this) {
+                        weight_ = 1;
+                        alert.setWeight(1);
+                        break;
+                    }
+                }
+                query.removeEventListener(this);
+                listener.onWeightReceived(weight_);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
+    public void apply_alert(Location loc,int weight){
         alert = new Alert();
         if(!TextUtils.isEmpty(et.getText().toString())){
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -172,7 +223,7 @@ public class AlertForm extends AppCompatActivity {
                 FirebaseUser user = mAuth.getCurrentUser();
                 String uid = user.getUid();
             if (imageUri != null) {
-                uploadToFirebase(imageUri, ts, latitude, longitude);
+                uploadToFirebase(imageUri, ts, latitude, longitude,weight);
             } else {
                 alert.setDisaster(et.getText().toString());
                 alert.setComments(et2.getText().toString());
@@ -180,6 +231,7 @@ public class AlertForm extends AppCompatActivity {
                 alert.setLongitude(longitude);
                 alert.setTimestamp(ts);
                 alert.setUid(uid);
+                alert.setWeight(weight);
                 //Add alert to database
                 databaseReference.push().setValue(alert);
                 Toast.makeText(AlertForm.this, "Alert was sent!", Toast.LENGTH_SHORT).show();
@@ -205,7 +257,7 @@ public class AlertForm extends AppCompatActivity {
         }
     }
 
-    private void uploadToFirebase(Uri uri, String timeStamp, String lat, String lon) {
+    private void uploadToFirebase(Uri uri, String timeStamp, String lat, String lon,int weight) {
         FirebaseUser user = mAuth.getCurrentUser();
         String uid = user.getUid();
 
@@ -223,6 +275,7 @@ public class AlertForm extends AppCompatActivity {
                         alert.setLatitude(lat);
                         alert.setLongitude(lon);
                         alert.setUid(uid);
+                        alert.setWeight(weight);
                         alert.setImg_url(uri.toString());
 
                         String key = databaseReference.push().getKey();
