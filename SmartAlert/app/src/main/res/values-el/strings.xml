@@ -31,4 +31,6 @@
     <string name="alert_form_btn">Αποστολή έκτακτου μηνύματος</string>
     <string name="profile">Προφίλ</string>
     <string name="alert_form_textview2">Παρακαλώ γράψτε τυχών σχόλια:</string>
+    <string name="statistics">στατιστικά</string>
+    <string name="hello_signin">Γεια σας, συνδεθείτε στον λογαριασμό σας</string>
 </resources>

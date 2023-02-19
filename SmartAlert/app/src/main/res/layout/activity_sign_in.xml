@@ -132,4 +132,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="81dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Spinner
+            android:id="@+id/spinner_"
+            android:layout_width="130dp"
+            android:layout_height="34dp"
+            android:layout_marginLeft="250dp"
+            android:layout_marginTop="20dp"
+            android:spinnerMode="dropdown">
+
+        </Spinner>
+
+        <TextView
+            android:id="@+id/language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/select_language"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/button_lang"
+            android:layout_width="136dp"
+            android:layout_height="27dp"
+            android:layout_marginLeft="90dp"
+            android:layout_marginTop="50dp"
+            android:onClick="changelang"
+            android:text="Change Language"
+            android:textSize="8sp">
+
+        </Button>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

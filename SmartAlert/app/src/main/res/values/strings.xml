@@ -31,4 +31,5 @@
     <string name="alert_form_btn">Send Alert</string>
     <string name="profile">Profile</string>
     <string name="statistics">Statistics</string>
+    <string name="hello_signin">Hello, sign in to your account</string>
 </resources>
