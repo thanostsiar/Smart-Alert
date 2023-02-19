@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,9 +47,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.sql.Timestamp;
 
-public class AlertForm extends AppCompatActivity {
+public class AlertForm extends AppCompatActivity  {
     ImageView imageView;
-    EditText et,et2;
+    EditText et, et2;
     Button btn_img;
     Button btn_apply;
     Alert alert;
@@ -69,6 +70,7 @@ public class AlertForm extends AppCompatActivity {
 
     private ActivityResultLauncher<Intent> activityResultLauncher;
     final String[] options = {"Flood", "Fire", "Earthquake", "Hurricane"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +89,17 @@ public class AlertForm extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.INVISIBLE);
         alert = new Alert();
+
+        /*if (ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED) {
+
+                loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+        else {
+            ActivityCompat.requestPermissions(AlertForm.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
+        }*/
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Choose the natural disaster")
@@ -111,6 +124,7 @@ public class AlertForm extends AppCompatActivity {
                         PackageManager.PERMISSION_GRANTED &&
                         ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
                                 PackageManager.PERMISSION_GRANTED) {
+
                     loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     dialog.show();
                 } else {
@@ -126,8 +140,7 @@ public class AlertForm extends AppCompatActivity {
                     Intent data = result.getData();
                     imageUri = data.getData();
                     imageView.setImageURI(imageUri);
-                }
-                else {
+                } else {
                     Toast.makeText(AlertForm.this, "No Image Selected", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -158,19 +171,23 @@ public class AlertForm extends AppCompatActivity {
 
             }
 
-            });
+        });
 
     }
 
-    public void apply_alert(Location loc){
+    public void apply_alert(Location loc) {
         alert = new Alert();
-        if(!TextUtils.isEmpty(et.getText().toString())){
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                String ts = timestamp.toString();
-                String latitude = loc.getLatitude()+"";
-                String longitude = loc.getLongitude()+"";
-                FirebaseUser user = mAuth.getCurrentUser();
-                String uid = user.getUid();
+        String latitude;
+        String longitude;
+        if (!TextUtils.isEmpty(et.getText().toString())) {
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            String ts = timestamp.toString();
+
+            latitude = loc.getLatitude() + "";
+            longitude = loc.getLongitude() + "";
+
+            FirebaseUser user = mAuth.getCurrentUser();
+            String uid = user.getUid();
             if (imageUri != null) {
                 uploadToFirebase(imageUri, ts, latitude, longitude);
             } else {
