@@ -3,11 +3,18 @@ package com.unipi.tsiaras.smartalert;
 public class Alert {
 
     private String uid, disaster, timestamp, latitude, longitude, img_url, comments;
+    int weight;
 
     public Alert(){
 
     }
 
+    public int getWeight(){
+        return weight;
+    }
+    public void setWeight(int weight){
+        this.weight = weight;
+    }
     public String getComments() {return comments;}
     public void setComments(String comments){
         this.comments = comments;
