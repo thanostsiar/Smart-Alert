@@ -28,10 +28,9 @@
     <string name="alert_form">Ποια είναι η έκτακτη περίσταση?</string>
     <string name="alert_form_textview">Επιλέξτε την φυσική καταστροφή:</string>
     <string name="alert_form_btnimage">Διαλέξτε Εικόνα</string>
-    <string name="alert_form_btn">Αποστολή έκτακτου μηνύματος</string>
+    <string name="alert_form_btn">Αποστολή</string>
     <string name="profile">Προφίλ</string>
     <string name="alert_form_textview2">Παρακαλώ γράψτε τυχών σχόλια:</string>
-    <string name="statistics">στατιστικά</string>
     <string name="hello_signin">Γεια σας, συνδεθείτε στον λογαριασμό σας</string>
     <string name="hello_employee">Γεια σου υπάλληλε, αυτά είναι τα έκτακτα μηνύματα</string>
     <string name="welcome">Καλώς Ήρθατε, στο SmartAlert!</string>

@@ -3,11 +3,13 @@ package com.unipi.tsiaras.smartalert;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -31,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +42,11 @@ public class EmployeeFragment extends Fragment {
 
     private DatabaseReference mDatabase;
     Query query;
+    CardView cardView;
     FirebaseAuth mAuth;
     RecyclerView alert_list;
     YourAdapter adapter;
+
     private static final double EARTH_RADIUS = 6371; // Earth's radius in kilometers
 
 
@@ -147,13 +152,8 @@ public class EmployeeFragment extends Fragment {
 
                     }
                 });
-
-
             }
         }
-
-
-
-
     }
+
 }

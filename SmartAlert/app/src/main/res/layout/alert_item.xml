@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/md_grey_300"
@@ -73,14 +74,14 @@
                 android:text="Alert Comment"
                 android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/alert_item_btn_accept"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@color/md_green_A400"
-                android:text="Accept"
-                android:textSize="16sp" />
+        <Button
+            android:id="@+id/alert_item_btn_accept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@color/md_green_A400"
+            android:text="Accept"
+            android:textSize="16sp" />
 
             <Button
                 android:id="@+id/alert_item_btn_decline"

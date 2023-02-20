@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.unipi.tsiaras.smartalert'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.unipi.tsiaras.smartalert"
         minSdk 27
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
         resConfigs "en", "el"
@@ -40,6 +40,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:20.1.0'
     implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'com.google.firebase:firebase-storage:20.0.1'
+    implementation 'com.google.firebase:firebase-messaging:23.0.3'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'

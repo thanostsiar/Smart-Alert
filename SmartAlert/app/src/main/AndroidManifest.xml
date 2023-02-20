@@ -27,11 +27,7 @@
             android:name=".AlertForm"
             android:exported="false" />
         <activity
-            android:name=".UserProfile"
-            android:configChanges="locale|orientation"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
+            android:name=".UserActivity"
             android:configChanges="locale|orientation"
             android:exported="false" />
         <activity
@@ -53,6 +49,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+
     </application>
 
 </manifest>

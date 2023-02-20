@@ -95,6 +95,9 @@ public class EmployeeActivity extends AppCompatActivity implements NavigationVie
             case R.id.nav_home:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EmployeeFragment()).commit();
                 break;
+            case R.id.nav_profile:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+                break;
             case R.id.nav_signout:
                 if (mAuth.getCurrentUser() != null){
                     mAuth.signOut();
@@ -121,10 +124,5 @@ public class EmployeeActivity extends AppCompatActivity implements NavigationVie
             super.onBackPressed();
         }
         super.onBackPressed();
-    }
-
-    public void toProfile(View view){
-        Intent intent = new Intent(this, UserProfile.class);
-        startActivity(intent);
     }
 }

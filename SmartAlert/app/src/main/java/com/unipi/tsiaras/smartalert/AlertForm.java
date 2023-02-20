@@ -99,17 +99,6 @@ public class AlertForm extends AppCompatActivity  {
         progressBar.setVisibility(View.INVISIBLE);
         alert = new Alert();
 
-        /*if (ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(AlertForm.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                        PackageManager.PERMISSION_GRANTED) {
-
-                loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        }
-        else {
-            ActivityCompat.requestPermissions(AlertForm.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
-        }*/
-
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Choose the natural disaster")
                 .setItems(options, new DialogInterface.OnClickListener() {
