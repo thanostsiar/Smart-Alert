@@ -52,8 +52,6 @@ public class EmployeeActivity extends AppCompatActivity implements NavigationVie
 
         headerView = navigationView.getHeaderView(0);
 
-        email = headerView.findViewById(R.id.navEmail);
-
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -68,24 +66,6 @@ public class EmployeeActivity extends AppCompatActivity implements NavigationVie
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new EmployeeFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
-        }
-
-        if (mAuth.getCurrentUser() != null){
-            String userId = mAuth.getUid();
-            usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        String emailDB = snapshot.child(userId).child("email").getValue(String.class);
-                        email.append(emailDB);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
         }
     }
 
