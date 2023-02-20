@@ -32,4 +32,6 @@
     <string name="profile">Profile</string>
     <string name="statistics">Statistics</string>
     <string name="hello_signin">Hello, sign in to your account</string>
+    <string name="hello_employee">Hello Employee, these are the ongoing alerts</string>
+    <string name="welcome">Welcome to SmartAlert!</string>
 </resources>

@@ -33,4 +33,6 @@
     <string name="alert_form_textview2">Παρακαλώ γράψτε τυχών σχόλια:</string>
     <string name="statistics">στατιστικά</string>
     <string name="hello_signin">Γεια σας, συνδεθείτε στον λογαριασμό σας</string>
+    <string name="hello_employee">Γεια σου υπάλληλε, αυτά είναι τα έκτακτα μηνύματα</string>
+    <string name="welcome">Καλώς Ήρθατε, στο SmartAlert!</string>
 </resources>
